@@ -1,91 +1,113 @@
-let particles = [];
-let newparticles = [];
-let n_elements = 100;
-let radius = 2;
-let mass = 3;
-let G = 1.4;
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
 
-/* [radius, mass, poX, poY, acX, acY] */
+let particulas = [];
+let numeroDeParticulas = 200;
+let forcaGravitacional = 0.1;
 
-for(let i = 0; i < n_elements; i++){
-    let obj = [radius, mass, random(1000, 0), random(1000, 0), random(10, -10), random(10, -10)]
-    particles.push(obj);
+const random = (max, min) => {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function random(e1, e2){
-     return Math.floor(Math.random() * (e1 - e2) + e2);
+const criarParticula = () => {
+    const particula = {
+        raio: 8,
+        massa: random(100, 1),
+        posicaoX: random(3000, 0),
+        posicaoY: random(3000, 0),
+        velocidadeX: random(10, -10),
+        velocidadeY: random(10, -10)
+    }
+
+    particulas.push(particula);
 }
 
-function gravity(){
-    for(let i = 0; i < particles.length; i++){
-        let acX = particles[i][4];
-        let acY = particles[i][5];
+const distanciaParticulas = (p1, p2) => {
+    const distanciaX = particulas[p1].posicaoX > particulas[p2].posicaoX ? particulas[p1].posicaoX - particulas[p2].posicaoX : particulas[p2].posicaoX - particulas[p1].posicaoX;
+    const distanciaY = particulas[p1].posicaoY > particulas[p2].posicaoY ? particulas[p1].posicaoY - particulas[p2].posicaoY : particulas[p2].posicaoY - particulas[p1].posicaoY;
+    return Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+}
 
-        for(let j = 0; j < particles.length; j++){
-            let xd = true;
-            let yd = true;
+const gravidadeEntreParticulas = (p1, p2, dist) => {
+    const gravidade = forcaGravitacional * ((particulas[p1].massa * particulas[p2].massa) / dist);
+    return gravidade;
+}
 
-            let x1 = 0;
-            let x2 = 0;
-            let y1 = 0;
-            let y2 = 0;
+const velocidadeGravidadeEmPX = (p1, gravidade) => {
+    const GravidadeEmPX = gravidade / particulas[p1].massa;
+    return GravidadeEmPX;
+}
 
-            let ca = 0;
-            let co = 0;
+const mudancaEmX = (p1, p2, distancia, velocidadeGravidade) => {
+    const distanciaX = particulas[p1].posicaoX - particulas[p2].posicaoX;
+    const mudancaX = (distanciaX / distancia) * velocidadeGravidade;
+    return mudancaX;
+}
 
-            if(particles[i][3] < 1){
-                x1 = particles[i][3] * -1; 
-            }
+const mudancaEmY = (p1, p2, distancia, velocidadeGravidade) => {
+    const distanciaY = particulas[p1].posicaoY - particulas[p2].posicaoY;
+    const mudancaY = (distanciaY / distancia) * velocidadeGravidade;
+    return mudancaY;
+}
 
-            if(particles[j][3] < 1){
-                x2 = particles[j][3] * -1; 
-            }
+const novoX = (p1, mudancaEmX) => {
+    const novoX = particulas[p1].posicaoX - mudancaEmX;
+    return novoX;
+}
 
-            if(particles[i][3] < 1){
-                y1 = particles[i][3] * -1; 
-            }
+const novoY = (p1, mudancaEmY) => {
+    const novoY = particulas[p1].posicaoY - mudancaEmY;
+    return novoY;
+}   
 
-            if(particles[j][3] < 1){
-                y2 = particles[j][3] * -1; 
-            }
-
-            if(x1 > x2){
-                ca = x1 - x2;
-            }else{
-                ca = x2 - x1;
-                xd = false;
-            }
-
-            if(y1 > y2){
-                co = y1 - y2;
-            }else{
-                co = y2 - y1;
-                yd = false;
-            }
-
-            let dist = Math.sqrt(Math.pow(ca, 2) + Math.pow(co, 2));
-            
-            let a = (G * (particles[i][2] * particles[j][2] / dist)) / particles[i][2] 
-
-            let new_ca = ca/dist*a
-            let new_co = co/dist*a  
-
-            if(xd == false){
-                new_ca = new_ca*-1;
-            }
-
-            if(yd == false){
-                new_co = new_co*-1;
-            }
-
-            acX += new_ca;
-            acY += new_co
-        }
-        
-        let o = particles;
-        o[2] += acX;
-        o[3] += acY;
-        o[4] = acX;
-        o[5] = acY;
+const desenhar = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particulas.length; i++) {
+        ctx.beginPath();
+        ctx.arc(particulas[i].posicaoX, particulas[i].posicaoY, particulas[i].raio, 0, Math.PI * 2, false);
+        ctx.fillStyle = '#ff0000';
+        ctx.fill();
+        ctx.closePath();
     }
 }
+
+const inicializar = () => {
+    for (let i = 0; i < numeroDeParticulas; i++) {
+        criarParticula();
+    }
+
+    const atualizar = () => {    
+        let novasParticulas = particulas;
+
+        for(let i = 0; i < particulas.length; i++) {
+            let velocidadeEmX = particulas[i].velocidadeX;
+            let velocidadeEmY = particulas[i].velocidadeY;
+
+            for(let j = 0; j < particulas.length; j++) {
+                const distanciaElementos = distanciaParticulas(i, j);
+                const forcaNEntreParticulas = gravidadeEntreParticulas(i, j, distanciaElementos);
+                const GravidadeEmPX = velocidadeGravidadeEmPX(i, forcaNEntreParticulas);
+                const mudancaX = mudancaEmX(i, j, distanciaElementos, GravidadeEmPX);
+                const mudancaY = mudancaEmY(i, j, distanciaElementos, GravidadeEmPX);
+
+                velocidadeEmX += distanciaElementos == 0 ? 0 : mudancaX;
+                velocidadeEmY += distanciaElementos == 0 ? 0 : mudancaY;
+            }
+
+            const novaPosicaoX = novoX(i, velocidadeEmX);
+            const novaPosicaoY = novoY(i, velocidadeEmY);
+
+            novasParticulas[i].posicaoX = novaPosicaoX;
+            novasParticulas[i].posicaoY = novaPosicaoY;
+            novasParticulas[i].velocidadeX = velocidadeEmX;
+            novasParticulas[i].velocidadeY = velocidadeEmY;
+        }
+
+        particulas = novasParticulas;
+        desenhar();
+    }
+
+    setInterval(atualizar, 30);
+}
+
+inicializar();
