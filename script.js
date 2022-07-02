@@ -2,7 +2,7 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 
 let particulas = [];
-let numeroDeParticulas = 200;
+let numeroDeParticulas = prompt('Digite o número de partículas:');
 let forcaGravitacional = 0.1;
 
 const random = (max, min) => {
