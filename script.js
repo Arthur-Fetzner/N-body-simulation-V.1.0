@@ -3,7 +3,7 @@ let ctx = canvas.getContext('2d');
 
 let particulas = [];
 let numeroDeParticulas = prompt('Digite o número de partículas:');
-let forcaGravitacional = 0.1;
+let forcaGravitacional = 0.05;
 
 const random = (max, min) => {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -13,7 +13,7 @@ const criarParticula = () => {
     const particula = {
         raio: 8,
         massa: random(100, 1),
-        posicaoX: random(3000, 0),
+        posicaoX: random(5000, 0),
         posicaoY: random(3000, 0),
         velocidadeX: random(10, -10),
         velocidadeY: random(10, -10)
@@ -65,7 +65,7 @@ const desenhar = () => {
     for (let i = 0; i < particulas.length; i++) {
         ctx.beginPath();
         ctx.arc(particulas[i].posicaoX, particulas[i].posicaoY, particulas[i].raio, 0, Math.PI * 2, false);
-        ctx.fillStyle = '#ff0000';
+        ctx.fillStyle = '#000';
         ctx.fill();
         ctx.closePath();
     }
@@ -101,6 +101,26 @@ const inicializar = () => {
             novasParticulas[i].posicaoY = novaPosicaoY;
             novasParticulas[i].velocidadeX = velocidadeEmX;
             novasParticulas[i].velocidadeY = velocidadeEmY;
+        
+            if(novaPosicaoX <= 0) {
+                novasParticulas[i].posicaoX = 0;
+                novasParticulas[i].velocidadeX = 0;
+                novasParticulas[i].velocidadeY = 0;
+            }else if(novaPosicaoX >= 5000) {
+                novasParticulas[i].posicaoX = 5000;
+                novasParticulas[i].velocidadeX = 0;
+                novasParticulas[i].velocidadeY = 0;
+            }
+
+            if(novaPosicaoY <= 0) {
+                novasParticulas[i].posicaoY = 0;
+                novasParticulas[i].velocidadeX = 0;
+                novasParticulas[i].velocidadeY = 0;
+            }else if(novaPosicaoY >= 3000) {
+                novasParticulas[i].posicaoY = 3000;
+                novasParticulas[i].velocidadeX = 0;
+                novasParticulas[i].velocidadeY = 0;
+            }
         }
 
         particulas = novasParticulas;
