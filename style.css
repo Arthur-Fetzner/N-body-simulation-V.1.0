@@ -45,6 +45,7 @@ main div div button{
     background-color: rgb(95, 95, 95);
     border: 1px solid black;
     border-radius: 10%;
+    cursor: pointer;
 }
 
 canvas{
