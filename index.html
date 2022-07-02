@@ -4,10 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>N-Body</title>
 </head>
 <body>
-    <canvas id="canvas" width="5000px" height="3000px" style="border:1px solid black"></canvas>
+    <main>
+        <h1>N-BODY</h1>
+        <div>
+            <h3>Numero de particulas:</h3>
+            <div>
+                <button onclick="defNumeroDeParticulas(100)">100</button>
+                <button onclick="defNumeroDeParticulas(500)">500</button>
+                <button onclick="defNumeroDeParticulas(1000)">1000</button>
+                <button onclick="defNumeroDeParticulas(1500)">1500</button>
+            </div>
+        </div>
+
+        <div>
+            <h3>Massa maxima:</h3>
+            <div>
+                <button onclick="defMassaMaxima(1)">1</button>
+                <button onclick="defMassaMaxima(10)">10</button>
+                <button onclick="defMassaMaxima(50)">50</button>
+                <button onclick="defMassaMaxima(300)">300</button>
+            </div>
+        </div>
+
+        <div>
+            <h3>Aceleração maxima inicial:</h3>
+            <div>
+                <button onclick="defAceleracaoMaxima(1)">1</button>
+                <button onclick="defAceleracaoMaxima(10)">10</button>
+                <button onclick="defAceleracaoMaxima(100)">100</button>
+                <button onclick="defAceleracaoMaxima(1000)">1000</button>
+            </div>
+        </div>
+
+        <div>
+            <h3>Gravidade:</h3>
+            <div>
+                <button onclick="defGravidade(0.01)">0.01</button>
+                <button onclick="defGravidade(0.1)">0.1</button>
+                <button onclick="defGravidade(0.5)">0.5</button>
+                <button onclick="defGravidade(1)">1</button>
+            </div>
+        </div>
+    </main>
+    <canvas id="canvas" width="600" height="600"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
