@@ -4,6 +4,7 @@ let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
 
 let particulas = [];
+let corpoCentral = false;
 let numeroDeParticulas = 30;
 let forcaGravitacional = 0;
 let massaMaxima = 0;
@@ -122,6 +123,13 @@ const inicializar = () => {
             }else if(novaPosicaoY >= canvasHeight) {
                 novasParticulas[i].posicaoY = canvasHeight;
             }
+
+            if(corpoCentral){
+                novasParticulas[0].posicaoX = canvasWidth / 2;
+                novasParticulas[0].posicaoY = canvasHeight / 2;
+                novasParticulas[0].velocidadeX = 0;
+                novasParticulas[0].velocidadeY = 0;
+            }
         }
 
         particulas = novasParticulas;
@@ -133,6 +141,16 @@ const inicializar = () => {
 
 const iniciar = () => {
     particulas = [];
+    if(corpoCentral){
+        particulas.push({
+            raio: 0,
+            massa: massaMaxima*500,
+            posicaoX: canvasWidth/2,
+            posicaoY: canvasHeight/2,
+            velocidadeX: 0,
+            velocidadeY: 0
+        })
+    }
     inicializar();
 }
 
@@ -153,5 +171,10 @@ const defAceleracaoMaxima = (n) => {
 
 const defGravidade = (n) => {
     forcaGravitacional = n;
+    iniciar();
+}
+
+const defCorpoCentral = () => {
+    corpoCentral = !corpoCentral;
     iniciar();
 }
