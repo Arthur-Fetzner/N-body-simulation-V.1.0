@@ -144,7 +144,7 @@ const iniciar = () => {
     if(corpoCentral){
         particulas.push({
             raio: 0,
-            massa: massaMaxima*500,
+            massa: massaMaxima*50,
             posicaoX: canvasWidth/2,
             posicaoY: canvasHeight/2,
             velocidadeX: 0,
