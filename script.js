@@ -20,8 +20,8 @@ const criarParticula = () => {
         massa: random(massaMaxima, 1),
         posicaoX: random(canvasWidth, 0),
         posicaoY: random(canvasHeight, 0),
-        velocidadeX: random(aceleracaoMaximaInicial, -aceleracaoMaximaInicial),
-        velocidadeY: random(aceleracaoMaximaInicial, -aceleracaoMaximaInicial)
+        velocidadeX: random(aceleracaoMaximaInicial+1, -aceleracaoMaximaInicial),
+        velocidadeY: random(aceleracaoMaximaInicial+1, -aceleracaoMaximaInicial)
     }
 
     particulas.push(particula);
@@ -77,6 +77,19 @@ const desenhar = () => {
 }
 
 const inicializar = () => {
+    particulas = [];
+
+    if(corpoCentral){
+        particulas.push({
+            raio: 0,
+            massa: massaMaxima*50,
+            posicaoX: canvasWidth/2,
+            posicaoY: canvasHeight/2,
+            velocidadeX: 0,
+            velocidadeY: 0
+        })
+    }
+
     for (let i = 0; i < numeroDeParticulas; i++) {
         criarParticula();
     }
@@ -111,7 +124,7 @@ const inicializar = () => {
                 novasParticulas[i].velocidadeX = 0;
                 novasParticulas[i].velocidadeY = 0;
             }
-        
+
             if(novaPosicaoX <= 0) {
                 novasParticulas[i].posicaoX = 0;
             }else if(novaPosicaoX >= canvasWidth) {
@@ -139,42 +152,18 @@ const inicializar = () => {
     setInterval(atualizar, 30);
 }
 
-const iniciar = () => {
-    particulas = [];
-    if(corpoCentral){
-        particulas.push({
-            raio: 0,
-            massa: massaMaxima*50,
-            posicaoX: canvasWidth/2,
-            posicaoY: canvasHeight/2,
-            velocidadeX: 0,
-            velocidadeY: 0
-        })
+const botoes = (acao, n) => {
+    if(acao == "defNumeroDeParticulas"){
+        numeroDeParticulas = n
+    }else if(acao == "defMassaMaxima"){
+        massaMaxima = n
+    }else if(acao == "defAceleracaoMaxima"){
+        aceleracaoMaximaInicial = n
+    }else if(acao == "defGravidade"){
+        forcaGravitacional = n
+    }else if(acao == "defCorpoCentral"){
+        corpoCentral = !corpoCentral
     }
+
     inicializar();
-}
-
-const defNumeroDeParticulas = (n) => {
-    numeroDeParticulas = n
-    iniciar();
-}
-
-const defMassaMaxima = (n) => {
-    massaMaxima = n;
-    iniciar();
-}
-
-const defAceleracaoMaxima = (n) => {
-    aceleracaoMaximaInicial = n;
-    iniciar();
-}
-
-const defGravidade = (n) => {
-    forcaGravitacional = n;
-    iniciar();
-}
-
-const defCorpoCentral = () => {
-    corpoCentral = !corpoCentral;
-    iniciar();
 }
