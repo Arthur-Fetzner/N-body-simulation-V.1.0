@@ -5,7 +5,7 @@ let canvasHeight = canvas.height;
 
 let particulas = [];
 let corpoCentral = false;
-let numeroDeParticulas = 30;
+let numeroDeParticulas = 0;
 let forcaGravitacional = 0;
 let massaMaxima = 0;
 let aceleracaoMaximaInicial = 0;
