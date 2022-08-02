@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <title>N-Body</title>
 </head>
-<body>
+<body onkeydown="keydown(event)" onkeyup="keyup(event)">
     <main>
         <h1>N-BODY</h1>
         <div>
@@ -47,13 +47,6 @@
                 <button onclick="botoes('defGravidade', 0.005)">0.005</button>
                 <button onclick="botoes('defGravidade', 0.01)">0.01</button>
                 <button onclick="botoes('defGravidade', 0.1)">0.1</button>
-            </div>
-        </div>
-
-        <div>
-            <h3>Corpo central:</h3>
-            <div>
-                <button onclick="botoes('defCorpoCentral')">On/Off</button>
             </div>
         </div>
     </main>
